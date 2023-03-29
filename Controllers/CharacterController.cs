@@ -13,7 +13,7 @@ public class CharacterController : ControllerBase
     private static List<Character> characters = new List<Character>
     {
         new Character(),
-        new Character { Name = "Sam" }
+        new Character { Id = 1, Name = "Sam" }
     };
     
     // api will be: "api/Character/GetAll", alternative of [HttpGet("GetAll")] could be: [HttpGet] and underneath: [Route("GetAll")]
@@ -24,8 +24,11 @@ public class CharacterController : ControllerBase
     }
     
     [HttpGet]
-    public ActionResult<Character> GetSingle() 
+    public ActionResult<Character> GetSingle(int id) // api/Character?id=1
     {
-        return Ok(characters[0]); 
+        return Ok(characters.FirstOrDefault(c => c.Id == id)); 
+        //FirstOrDefault method is used to find the first Character object in the characters list that has an ID equal to the one specified in the "id" variable.
+        //If an object with the matching ID is found, the method will return that object,
+        //otherwise it will return the default value for the Character data type (which in this case is null)
     }
 }
