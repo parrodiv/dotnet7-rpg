@@ -23,8 +23,8 @@ public class CharacterController : ControllerBase
         return Ok(characters); // ok = 200 status code, NotFound = 404, BadRequest = 400
     }
     
-    [HttpGet]
-    public ActionResult<Character> GetSingle(int id) // api/Character?id=1
+    [HttpGet("{id:int}")] // parameter {id} has to be the same name of the parameter passed to the method
+    public ActionResult<Character> GetSingle(int id) // api/Character/{id}
     {
         return Ok(characters.FirstOrDefault(c => c.Id == id)); 
         //FirstOrDefault method is used to find the first Character object in the characters list that has an ID equal to the one specified in the "id" variable.
