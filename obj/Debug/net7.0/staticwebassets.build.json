@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "Q/QGQYw9H3i1aM3TI17NfBfj9SYO44AWkIFFSA1hch4=",
+  "Source": "dotnet7-rpg",
+  "BasePath": "_content/dotnet7-rpg",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}

@@ -16,8 +16,10 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+// middleware for https
 app.UseHttpsRedirection();
 
+//middleware for authorization
 app.UseAuthorization();
 
 app.MapControllers();
