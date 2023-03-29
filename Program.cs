@@ -1,4 +1,5 @@
 global using dotnet7_rpg.Models;
+using dotnet7_rpg.Controllers;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,3 +28,5 @@ app.UseAuthorization();
 app.MapControllers();
 
 app.Run();
+
+

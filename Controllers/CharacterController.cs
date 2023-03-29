@@ -8,11 +8,15 @@ namespace dotnet7_rpg.Controllers;
 [Route("api/[controller]")] // "api/Character" the part of the name of c# class that comes before Controller word
 public class CharacterController : ControllerBase
 {
-    private static Character knight = new Character();
+    private static List<Character> characters = new List<Character>
+    {
+        new Character(),
+        new Character { Name = "Sam" }
+    };
     
     [HttpGet]
-    public ActionResult<Character> Get() // ActionResult<Character> means that this action returns a Character type data
+    public ActionResult<List<Character>> Get() // ActionResult<Character> means that this action returns a Character type data
     {
-        return Ok(knight); // ok = 200 status code, NotFound = 404, BadRequest = 400
+        return Ok(characters); // ok = 200 status code, NotFound = 404, BadRequest = 400
     }
 }
