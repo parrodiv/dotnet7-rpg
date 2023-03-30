@@ -31,4 +31,11 @@ public class CharacterController : ControllerBase
         //If an object with the matching ID is found, the method will return that object,
         //otherwise it will return the default value for the Character data type (which in this case is null)
     }
+    
+    [HttpPost()]
+    public ActionResult<List<Character>> AddCharacter(Character newCharacter)
+    {
+        characters.Add(newCharacter);
+        return Ok(characters);
+    }
 }
