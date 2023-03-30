@@ -2,7 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet7_rpg.Controllers;
 
-// Controllerbase is a base class for an MVC controller without View support, that will be Controller
+// ControllerBase is a base class for an MVC controller without View support, that will be Controller
 // Indicates that a type and all derived types are used to serve HTTP API responses.
 // "api/Character" the part of the name of c# class that comes before Controller word
 [ApiController]
@@ -17,25 +17,31 @@ public class CharacterController : ControllerBase
     {
         _characterService = characterService;
     }
+    
+    
 
     // api will be: "api/Character/GetAll", alternative of [HttpGet("GetAll")] could be: [HttpGet] and underneath: [Route("GetAll")]
     [HttpGet("GetAll")]
-    public async Task<ActionResult<List<Character>>> Get()
+    public async Task<ActionResult<ServiceResponse<List<Character>>>> GetAll()
     {
         return Ok(await _characterService.GetAllCharacters()); // ok = 200 status code, NotFound = 404, BadRequest = 400
     }
+    
+    
 
     [HttpGet("{id:int}")] // parameter {id} has to be the same name of the parameter passed to the method
-    public async Task<ActionResult<Character>> GetSingle(int id) // api/Character/{id}
+    public async Task<ActionResult<ServiceResponse<Character>>> GetSingle(int id) // api/Character/{id}
     {
         return Ok(await _characterService.GetSingleCharacter(id));
         //FirstOrDefault method is used to find the first Character object in the characters list that has an ID equal to the one specified in the "id" variable.
         //If an object with the matching ID is found, the method will return that object,
         //otherwise it will return the default value for the Character data type (which in this case is null)
     }
+    
+    
 
     [HttpPost()]
-    public async Task<ActionResult<List<Character>>> AddCharacter(Character newCharacter)
+    public async Task<ActionResult<ServiceResponse<List<Character>>>> AddCharacter(Character newCharacter)
     {
         return Ok(await _characterService.AddCharacter(newCharacter));
     }
