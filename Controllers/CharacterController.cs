@@ -12,7 +12,7 @@ public class CharacterController : ControllerBase
     // private member for the constructor
     private readonly ICharacterService _characterService;
 
-    // constructore
+    // constructor
     public CharacterController(ICharacterService characterService)
     {
         _characterService = characterService;
