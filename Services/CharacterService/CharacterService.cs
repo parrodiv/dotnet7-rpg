@@ -8,12 +8,12 @@ public class CharacterService : ICharacterService
         new Character { Id = 1, Name = "Sam" }
     };
     
-    public List<Character> GetAllCharacters()
+    public async Task<List<Character>> GetAllCharacters()
     {
         return characters;
     }
 
-    public Character GetSingleCharacter(int id)
+    public async Task<Character> GetSingleCharacter(int id)
     {
         var character =  characters.FirstOrDefault(c => c.Id == id);
         if (character is not null)
@@ -24,7 +24,7 @@ public class CharacterService : ICharacterService
         throw new Exception($"Character not found with id:{id}");
     }
 
-    public List<Character> AddCharacter(Character newCharacter)
+    public async Task<List<Character>> AddCharacter(Character newCharacter)
     {
         characters.Add(newCharacter);
         return characters;
