@@ -1,5 +1,7 @@
+// tutti i global saranno accessibili in globale
 global using dotnet7_rpg.Models;
-using dotnet7_rpg.Controllers;
+global using dotnet7_rpg.Services.CharacterService;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
