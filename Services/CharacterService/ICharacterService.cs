@@ -8,4 +8,5 @@ public interface ICharacterService
     Task<ServiceResponse<GetCharacterDto>> GetSingleCharacter(int id);
     Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter);
     Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter);
+    Task<ServiceResponse<GetCharacterDto>> DeleteCharacter(int id);
 }

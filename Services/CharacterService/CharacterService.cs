@@ -21,24 +21,31 @@ public class CharacterService : ICharacterService
     
     public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
     {
-        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
-        serviceResponse.Data = _mapper.Map<List<GetCharacterDto>>(characters);  
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>
+        {
+            Data = _mapper.Map<List<GetCharacterDto>>(characters)
+        };
         return serviceResponse;
     }
 
     public async Task<ServiceResponse<GetCharacterDto>> GetSingleCharacter(int id)
     {
-        var character =  characters.FirstOrDefault(c => c.Id == id);
-        var serviceResponse = new ServiceResponse<GetCharacterDto>
+      
+        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+      
+        try
         {
-            Data = _mapper.Map<GetCharacterDto>(character)
-        };
-        if (character is not null)
+            var character =  characters.FirstOrDefault(c => c.Id == id) ?? throw  new  Exception($"Character Id {id} not found");
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(character);
+        }
+        catch (Exception ex)
         {
-            return serviceResponse;
+            serviceResponse.Message = ex.Message;
+            serviceResponse.Success = false;
         }
 
-        throw new Exception($"Character not found with id:{id}");
+        return serviceResponse;
+
     }
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
@@ -58,7 +65,7 @@ public class CharacterService : ICharacterService
     public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
     {
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
-           try
+        try
         {
             var character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
             int indexToChange = characters.IndexOf(character ?? throw new InvalidOperationException($"the id {updatedCharacter.Id} of character to update is not found"));
@@ -72,5 +79,26 @@ public class CharacterService : ICharacterService
         }
         return serviceResponse;
         
+    }
+
+    public async Task<ServiceResponse<GetCharacterDto>> DeleteCharacter(int id)
+    {
+        var characterToRemove = characters.FirstOrDefault(c => c.Id == id);
+        var serviceResponse = new ServiceResponse<GetCharacterDto>
+        {
+            Data = _mapper.Map<GetCharacterDto>(characterToRemove)
+        };
+        try
+        {
+            characters.Remove(characterToRemove ?? throw new Exception($"Character Id {id} not found"));
+            serviceResponse.Message = $"Character with id {id} is removed successfully";
+        }
+        catch (Exception ex)
+        {
+            serviceResponse.Message = ex.Message;
+            serviceResponse.Success = false;
+        }
+
+        return serviceResponse;
     }
 }
