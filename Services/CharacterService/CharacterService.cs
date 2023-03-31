@@ -54,4 +54,23 @@ public class CharacterService : ICharacterService
         };
         return serviceResponse;
     }
+
+    public async Task<ServiceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto updatedCharacter)
+    {
+        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+           try
+        {
+            var character = characters.FirstOrDefault(c => c.Id == updatedCharacter.Id);
+            int indexToChange = characters.IndexOf(character ?? throw new InvalidOperationException($"the id {updatedCharacter.Id} of character to update is not found"));
+            characters[indexToChange] = _mapper.Map<Character>(updatedCharacter);
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(updatedCharacter);
+        }
+        catch(Exception ex)
+        {
+            serviceResponse.Success = false;
+            serviceResponse.Message = ex.Message;
+        }
+        return serviceResponse;
+        
+    }
 }

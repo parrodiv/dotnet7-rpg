@@ -6,5 +6,7 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Character, GetCharacterDto>(); // Character to GetCharacterDto
         CreateMap<AddCharacterDto, Character>(); // AddCharacterDto to Character
+        CreateMap<UpdateCharacterDto, Character>();
+        CreateMap<UpdateCharacterDto, GetCharacterDto>();
     }
 }
