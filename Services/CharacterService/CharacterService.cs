@@ -8,19 +8,19 @@ public class CharacterService : ICharacterService
         new Character { Id = 1, Name = "Sam" }
     };
     
-    public async Task<ServiceResponse<List<Character>>> GetAllCharacters()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
     {
-        var serviceResponse = new ServiceResponse<List<Character>>();
-        serviceResponse.Data = characters;
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
+        serviceResponse.Data = characters;  // now it gives an error (ServiceResponse<T> --> T became   List<GetCharacterDto> so Data is List<GetCharacterDto>, while characters is List<Character> )
         return serviceResponse;
     }
 
-    public async Task<ServiceResponse<Character>> GetSingleCharacter(int id)
+    public async Task<ServiceResponse<GetCharacterDto>> GetSingleCharacter(int id)
     {
         var character =  characters.FirstOrDefault(c => c.Id == id);
-        var serviceResponse = new ServiceResponse<Character>
+        var serviceResponse = new ServiceResponse<GetCharacterDto>
         {
-            Data = character
+            Data = character // now it gives an error ( same as line 14)
         };
         if (character is not null)
         {
@@ -30,12 +30,12 @@ public class CharacterService : ICharacterService
         throw new Exception($"Character not found with id:{id}");
     }
 
-    public async Task<ServiceResponse<List<Character>>> AddCharacter(Character newCharacter)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
     {
         characters.Add(newCharacter);
-        var serviceResponse = new ServiceResponse<List<Character>>
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>
         {
-            Data = characters
+            Data = characters // now it gives an error ( same as line 14)
         };
         return serviceResponse;
     }
