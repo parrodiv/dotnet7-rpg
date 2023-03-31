@@ -43,12 +43,14 @@ public class CharacterService : ICharacterService
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
     {
-        characters.Add(_mapper.Map<Character>(newCharacter)); // characters is a List of Character not a List of AddCharacterDto, so newCharacter should be converted in Character
+        var character = _mapper.Map<Character>(newCharacter);
+        character.Id = characters.Max(c => c.Id) + 1; // Max() search the maximum number between the c.Id props
+        characters.Add(character); // characters is a List of Character not a List of AddCharacterDto, so newCharacter should be converted in Character
         var serviceResponse = new ServiceResponse<List<GetCharacterDto>>
         {
             //Data = _mapper.Map<List<GetCharacterDto>>(characters) 
             // ALTERNATIVE
-            Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList() // Select returns an enum so I convert it into a string
+            Data = characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToList(), // Select returns an enum so I convert it into a string
         };
         return serviceResponse;
     }
