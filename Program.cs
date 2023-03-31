@@ -2,6 +2,7 @@
 global using dotnet7_rpg.Models;
 global using dotnet7_rpg.Services.CharacterService;
 global using dotnet7_rpg.Dtos.Character;
+global using AutoMapper;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -18,6 +19,9 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 // AddScoped = means that a single instance of the service is created within each scope.
 // AddTransient = provides a new instance to every controller and to every service even within the same request
 // AddSingleton = this one creates only one istance that is used for every request
+
+//Register AutoMapper
+builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
 var app = builder.Build();
 

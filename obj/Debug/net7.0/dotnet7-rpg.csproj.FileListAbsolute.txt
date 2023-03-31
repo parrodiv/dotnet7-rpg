@@ -31,3 +31,5 @@
 /Users/alessandroparrilla/corsi/dotnet7-rpg/obj/Debug/net7.0/dotnet7-rpg.pdb
 /Users/alessandroparrilla/corsi/dotnet7-rpg/obj/Debug/net7.0/dotnet7-rpg.genruntimeconfig.cache
 /Users/alessandroparrilla/corsi/dotnet7-rpg/obj/Debug/net7.0/ref/dotnet7-rpg.dll
+/Users/alessandroparrilla/corsi/dotnet7-rpg/bin/Debug/net7.0/AutoMapper.dll
+/Users/alessandroparrilla/corsi/dotnet7-rpg/bin/Debug/net7.0/AutoMapper.Extensions.Microsoft.DependencyInjection.dll
