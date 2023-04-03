@@ -69,8 +69,7 @@ public class CharacterController : ControllerBase
         {
             return NotFound(response);
         }
-        return Ok(response); 
-       
+        return Ok(response);
     }
     
     

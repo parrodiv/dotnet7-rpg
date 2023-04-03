@@ -86,34 +86,40 @@ public class AuthRepository : IAuthRepository
     }
 
     private string CreateToken(User user)
-    {
+    {   
+        // A claim is a piece of information about the user that will be included in the token
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
             new Claim(ClaimTypes.Name, user.Username)
         };
-
+        
+        // Get the app settings token: is a secret key that is used to sign the token
         var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
         if (appSettingsToken is null)
         {
             throw new Exception("AppSettings Token is null!");
         }
-
+    
+        // Create a SymmetricCredentials: This object contains the key and algorithm used to sign the token
         SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
-
         SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
-
+        
+        // This object specifies the details of the token, such as the claims, expiration time, and signing credentials
         var tokenDescriptor = new SecurityTokenDescriptor
         {
             Subject = new ClaimsIdentity(claims),
             Expires = DateTime.Now.AddDays(1),
             SigningCredentials = creds
         };
-
+        
+        // This object is used to create and write the token
         JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        
+        // Create the token: the token is created using the token descriptor
         SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
         
+        // the token is written as a string using the WriteToken method of the JwtSecurityTokenHandler
         return tokenHandler.WriteToken(token);
-        
     }
 }
