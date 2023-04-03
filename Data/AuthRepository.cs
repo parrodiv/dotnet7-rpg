@@ -1,16 +1,21 @@
 
 
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.IdentityModel.Tokens;
 
 namespace dotnet7_rpg.Data;
 
 public class AuthRepository : IAuthRepository
 {
     private readonly DataContext _context;
+    private readonly IConfiguration _configuration;
 
-    public AuthRepository(DataContext context)
+    public AuthRepository(DataContext context, IConfiguration configuration)  // with configuration I can access to appsettings.json file where it is stored the Token key 
     {
         _context = context;
+        _configuration = configuration;
     }
     public async Task<ServiceResponse<int>> Register(User user, string password)
     {
@@ -48,7 +53,7 @@ public class AuthRepository : IAuthRepository
         }
         else
         {
-            response.Data = user?.Id.ToString();
+            response.Data = CreateToken(user);
         }
 
         return response;
@@ -78,5 +83,37 @@ public class AuthRepository : IAuthRepository
         var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
         // compare computedHash with the passwordHash in db
         return computedHash.SequenceEqual(passwordHash);  // it returns true or false
+    }
+
+    private string CreateToken(User user)
+    {
+        var claims = new List<Claim>
+        {
+            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
+            new Claim(ClaimTypes.Name, user.Username)
+        };
+
+        var appSettingsToken = _configuration.GetSection("AppSettings:Token").Value;
+        if (appSettingsToken is null)
+        {
+            throw new Exception("AppSettings Token is null!");
+        }
+
+        SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(appSettingsToken));
+
+        SigningCredentials creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+        var tokenDescriptor = new SecurityTokenDescriptor
+        {
+            Subject = new ClaimsIdentity(claims),
+            Expires = DateTime.Now.AddDays(1),
+            SigningCredentials = creds
+        };
+
+        JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+        SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+        
+        return tokenHandler.WriteToken(token);
+        
     }
 }
