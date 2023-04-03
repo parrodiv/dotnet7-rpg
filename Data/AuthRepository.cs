@@ -1,10 +1,27 @@
+using Microsoft.AspNetCore.Components.Infrastructure;
+
 namespace dotnet7_rpg.Data;
 
 public class AuthRepository : IAuthRepository
 {
-    public Task<ServiceResponse<int>> Register(User user, string password)
+    private readonly DataContext _context;
+
+    public AuthRepository(DataContext context)
     {
-        throw new NotImplementedException();
+        _context = context;
+    }
+    public async Task<ServiceResponse<int>> Register(User user, string password)
+    {
+        CreatePasswordHash(password, out var passwordHash, out var passwordSalt);
+
+        user.PasswordHash = passwordHash;
+        user.PasswordSalt = passwordSalt;
+        
+        _context.Users.Add(user);
+        await _context.SaveChangesAsync();
+        var response = new ServiceResponse<int>();
+        response.Data = user.Id;
+        return response;
     }
 
     public Task<ServiceResponse<string>> Login(string username, string password)
@@ -15,5 +32,12 @@ public class AuthRepository : IAuthRepository
     public Task<bool> UserExists(string username)
     {
         throw new NotImplementedException();
+    }
+
+    private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+    {
+        using var hmac = new System.Security.Cryptography.HMACSHA512();
+        passwordSalt = hmac.Key;
+        passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
     }
 }
