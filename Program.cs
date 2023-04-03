@@ -26,6 +26,9 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 // AddTransient = provides a new instance to every controller and to every service even within the same request
 // AddSingleton = this one creates only one istance that is used for every request
 
+// Register the AuthRepository instance
+builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
 //Register AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
