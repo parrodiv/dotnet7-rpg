@@ -14,4 +14,5 @@ public class DataContext : DbContext
     // this is the Characters table
     public DbSet<Character> Characters => Set<Character>(); // Creates a DbSet<TEntity> that can be used to query and save instances of TEntity
     public DbSet<User> Users => Set<User>();
+    public DbSet<Weapon> Weapons => Set<Weapon>();
 }
