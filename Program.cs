@@ -7,6 +7,8 @@ global using Microsoft.EntityFrameworkCore;
 global using dotnet7_rpg.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,7 +21,20 @@ builder.Services.AddDbContext<DataContext>(options => options.UseSqlServer(build
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    // enable the option in the swagger UI to enter the Bearer Token
+    c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    {
+        Description = """ Standard Authorization header using the Bearer scheme. Example: "bearer {token}" """,
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Type = SecuritySchemeType.ApiKey
+    });
+    
+    c.OperationFilter<SecurityRequirementsOperationFilter>();
+});
+
 // now the web API knows that it has to use the CharacterService Class whenever a controller wants to inject the ICharacterService
 // in essence it pass to the constructor of the controller CharacterService class to the parameter characterService
 //At runtime, the container will resolve the dependency and create an instance of CharacterService to be injected into the controller.

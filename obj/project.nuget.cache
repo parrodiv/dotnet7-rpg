@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "AnMtwtjBC5rzB0TZlYRTF5/Fj8FoOKdnrhm3YzaMnLKRV8N9xiafiVEEouuRfBEqAE8XzzNeKxzEcoJqQX3XoA==",
+  "dgSpecHash": "r6yGedPQgDAO2Ji5jCsw+lJi6bbLgxXKBPKVvRAEdS05HivqdYVgNVApaMxh/QUslSVm5Np/gtbILHFgXNQrLA==",
   "success": true,
   "projectFilePath": "/Users/alessandroparrilla/corsi/dotnet7-rpg/dotnet7-rpg.csproj",
   "expectedPackageFiles": [
@@ -47,7 +47,10 @@
     "/Users/alessandroparrilla/.nuget/packages/microsoft.win32.registry/5.0.0/microsoft.win32.registry.5.0.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/microsoft.win32.systemevents/5.0.0/microsoft.win32.systemevents.5.0.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/mono.texttemplating/2.2.1/mono.texttemplating.2.2.1.nupkg.sha512",
+    "/Users/alessandroparrilla/.nuget/packages/scrutor/3.3.0/scrutor.3.3.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore/6.4.0/swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
+    "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore.filters/7.0.6/swashbuckle.aspnetcore.filters.7.0.6.nupkg.sha512",
+    "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore.filters.abstractions/7.0.6/swashbuckle.aspnetcore.filters.abstractions.7.0.6.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore.swagger/6.4.0/swashbuckle.aspnetcore.swagger.6.4.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore.swaggergen/6.4.0/swashbuckle.aspnetcore.swaggergen.6.4.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/swashbuckle.aspnetcore.swaggerui/6.4.0/swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
