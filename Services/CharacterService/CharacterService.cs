@@ -71,8 +71,19 @@ public class CharacterService : ICharacterService
         var serviceResponse = new ServiceResponse<GetCharacterDto>();
         try
         {
-            var character = await _context.Characters.FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id) ??
-                            throw new Exception($"the id {updatedCharacter.Id} of character to update is not found");
+            // without Include if we try to access to the the User property after receiving the character from the database it will return null
+            // it means that Entity Framework did not include the related object to the character
+            // it works only when we add a second condition to the FirstOrDefault method (see GetSingleCharacter & DeleteCharacter) because the db context is still available there
+            // but after that we only got the characters with no relationships
+            var character = await _context.Characters
+                .Include(c => c.User)
+                .FirstOrDefaultAsync(c => c.Id == updatedCharacter.Id);
+
+            if (character is null || character.User!.Id != GetUserId())
+            {
+                throw new Exception($"the id {updatedCharacter.Id} of character to update is not found");
+            }
+                           
             
             // copy the updateCharacter to character, it is a shortcut for do character.Name = updatedCharacter.Name and so on....
             _mapper.Map(updatedCharacter, character);
