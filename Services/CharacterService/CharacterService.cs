@@ -37,7 +37,8 @@ public class CharacterService : ICharacterService
       
         try
         {
-            var dbCharacter =  await _context.Characters.FirstOrDefaultAsync(c => c.Id == id) ?? throw  new  Exception($"Character Id {id} not found");
+            // adding an extra condition, so I can get a specific Character if the User that make a request is the owner of that Character
+            var dbCharacter =  await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId()) ?? throw  new  Exception($"Character Id {id} not found");
             serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
         }
         catch (Exception ex)
@@ -47,7 +48,6 @@ public class CharacterService : ICharacterService
         }
 
         return serviceResponse;
-
     }
 
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
@@ -92,17 +92,17 @@ public class CharacterService : ICharacterService
         
     }
 
-    public async Task<ServiceResponse<GetCharacterDto>> DeleteCharacter(int id)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> DeleteCharacter(int id)
     {
-        var characterToRemove = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id);
-        var serviceResponse = new ServiceResponse<GetCharacterDto>
-        {
-            Data = _mapper.Map<GetCharacterDto>(characterToRemove)
-        };
+        var characterToRemove = await _context.Characters.FirstOrDefaultAsync(c => c.Id == id && c.User!.Id == GetUserId());
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>();
         try
         {
             _context.Characters.Remove(characterToRemove ?? throw new Exception($"Character Id {id} not found"));
             await _context.SaveChangesAsync();
+            serviceResponse.Data = await _context.Characters
+                .Where(c => c.User!.Id == GetUserId())
+                .Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync();
             serviceResponse.Message = $"Character with id {id} is removed successfully";
         }
         catch (Exception ex)
