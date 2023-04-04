@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +27,11 @@ public class CharacterController : ControllerBase
     [HttpGet("GetAll")]
     public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAll()
     {
-        var response = await _characterService.GetAllCharacters();
+        // ControllerBase provides a User object of type claims principle
+        // This user object provides all the claimes we added to the JSON Web Token
+        // see the List<Claim> in CreateToken method
+        int userId = int.Parse(User.Claims.FirstOrDefault(c => c.Type == ClaimTypes.NameIdentifier)!.Value); 
+        var response = await _characterService.GetAllCharacters(userId);
         if (response.Data == null)
         {
             return NotFound(response);

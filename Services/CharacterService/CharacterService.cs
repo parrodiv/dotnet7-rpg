@@ -14,9 +14,10 @@ public class CharacterService : ICharacterService
 
     
     
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(int userId)
     {
-        var dbCharacters = await _context.Characters.ToListAsync();
+        // Now I'll get all the caracter associated to the user that makes the request
+        var dbCharacters = await _context.Characters.Where(c => c.User!.Id == userId ).ToListAsync();
         var serviceResponse = new ServiceResponse<List<GetCharacterDto>>()
         {
             Data = _mapper.Map<List<GetCharacterDto>>(dbCharacters)
