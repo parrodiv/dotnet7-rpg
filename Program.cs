@@ -35,6 +35,9 @@ builder.Services.AddSwaggerGen(c =>
     c.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
+// Register HttpContextAccessor
+builder.Services.AddHttpContextAccessor();
+
 // now the web API knows that it has to use the CharacterService Class whenever a controller wants to inject the ICharacterService
 // in essence it pass to the constructor of the controller CharacterService class to the parameter characterService
 //At runtime, the container will resolve the dependency and create an instance of CharacterService to be injected into the controller.
@@ -42,6 +45,8 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 // Register the AuthRepository instance
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+
 
 //Register AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);

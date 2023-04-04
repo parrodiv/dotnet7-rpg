@@ -1,23 +1,28 @@
 
+using System.Security.Claims;
+
 namespace dotnet7_rpg.Services.CharacterService;
 
 public class CharacterService : ICharacterService
 {
     private readonly IMapper _mapper;
     private readonly DataContext _context;
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public CharacterService(IMapper mapper, DataContext context)
+    public CharacterService(IMapper mapper, DataContext context, IHttpContextAccessor httpContextAccessor)
     {
         _mapper = mapper;
         _context = context;
+        _httpContextAccessor = httpContextAccessor;
     }
 
+    private int GetUserId() => int.Parse(_httpContextAccessor.HttpContext!.User
+        .FindFirstValue(ClaimTypes.NameIdentifier)!);
     
-    
-    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters(int userId)
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharacters()
     {
-        // Now I'll get all the caracter associated to the user that makes the request
-        var dbCharacters = await _context.Characters.Where(c => c.User!.Id == userId ).ToListAsync();
+        // Now I'll get all the character associated to the user that makes the request
+        var dbCharacters = await _context.Characters.Where(c => c.User!.Id == GetUserId() ).ToListAsync();
         var serviceResponse = new ServiceResponse<List<GetCharacterDto>>()
         {
             Data = _mapper.Map<List<GetCharacterDto>>(dbCharacters)
