@@ -53,11 +53,15 @@ public class CharacterService : ICharacterService
     public async Task<ServiceResponse<List<GetCharacterDto>>> AddCharacter(AddCharacterDto newCharacter)
     {
         var character = _mapper.Map<Character>(newCharacter);
-        _context.Characters.Add(character); // characters is a List of Character not a List of AddCharacterDto, so newCharacter should be converted in Character
+        // Set the User property of Character searching in the Users table the corrisponding id of the user that make a request
+        character.User = await _context.Users.FirstOrDefaultAsync(u => u.Id == GetUserId());
+        _context.Characters.Add(character); 
         await _context.SaveChangesAsync();
         var serviceResponse = new ServiceResponse<List<GetCharacterDto>>
         {
-            Data = await _context.Characters.Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync() // Select returns an enum so I convert it into a string
+            Data = await _context.Characters
+                .Where(c => c.User!.Id == GetUserId())
+                .Select(c => _mapper.Map<GetCharacterDto>(c)).ToListAsync() // Select returns an enum so I convert it into a string
         };
         return serviceResponse;
     }

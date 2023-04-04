@@ -32,7 +32,7 @@ public class AuthController : ControllerBase
     
     
     [HttpPost("Login")]
-    public async Task<ActionResult<ServiceResponse<string>>> Register(UserLoginDto request)
+    public async Task<ActionResult<ServiceResponse<string>>> Login(UserLoginDto request)
     {
         var response = await _authRepository.Login(request.Username, request.Password);
 
