@@ -5,6 +5,8 @@ global using dotnet7_rpg.Dtos.Character;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using dotnet7_rpg.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -22,15 +24,29 @@ builder.Services.AddSwaggerGen();
 // in essence it pass to the constructor of the controller CharacterService class to the parameter characterService
 //At runtime, the container will resolve the dependency and create an instance of CharacterService to be injected into the controller.
 builder.Services.AddScoped<ICharacterService, CharacterService>();
-// AddScoped = means that a single instance of the service is created within each scope.
-// AddTransient = provides a new instance to every controller and to every service even within the same request
-// AddSingleton = this one creates only one istance that is used for every request
 
 // Register the AuthRepository instance
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 
 //Register AutoMapper
 builder.Services.AddAutoMapper(typeof(Program).Assembly);
+
+// AddAuthentication
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        // initialize a new instance of token validation parameters and then set these parameters
+        options.TokenValidationParameters = new TokenValidationParameters()
+        {
+            ValidateIssuerSigningKey = true,
+            IssuerSigningKey = new SymmetricSecurityKey(System.Text.Encoding.UTF8
+                .GetBytes(builder.Configuration.GetSection("AppSettings:Token")
+                    .Value!)), // "!" null-forgiving operator, this means that I'm sure that this won't be null, but in case it will, it returns null as well
+            ValidateIssuer = false,
+            ValidateAudience = false
+
+        };
+    });
 
 var app = builder.Build();
 
@@ -43,6 +59,9 @@ if (app.Environment.IsDevelopment())
 
 // middleware for https
 app.UseHttpsRedirection();
+
+// important to insert above UseAuthorization();
+app.UseAuthentication();
 
 //middleware for authorization
 app.UseAuthorization();

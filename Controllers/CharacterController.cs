@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet7_rpg.Controllers;
@@ -5,6 +6,7 @@ namespace dotnet7_rpg.Controllers;
 // ControllerBase is a base class for an MVC controller without View support, that will be Controller
 // Indicates that a type and all derived types are used to serve HTTP API responses.
 // "api/Character" the part of the name of c# class that comes before Controller word
+[Authorize] // this means that we have to add the bearer token to the header of our request
 [ApiController]
 [Route("api/[controller]")]
 public class CharacterController : ControllerBase
