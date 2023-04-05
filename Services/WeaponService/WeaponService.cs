@@ -29,18 +29,22 @@ public class WeaponService : IWeaponService
         {   
             // check if the character belongs to the current authenticated user
             var character = await _context.Characters
+                .Include(c => c.User)
                 .FirstOrDefaultAsync(c => c.Id == newWeapon.CharacterId &&
                                           c.User!.Id == GetUserId());
             
             if (character is null) throw new Exception("Character not found");
 
-                var weapon = _mapper.Map<Weapon>(newWeapon); // it will contains Name, Damage, CharcaterId
-            // add the Character object to the Character property of weapon
+            var weapon = _mapper.Map<Weapon>(newWeapon); // it will contains Name, Damage, CharcaterId
+
+            // add the Character object to the Character property of weapon object
             weapon.Character = character;
-
-            _context.Weapons.Add(weapon);
+            
+            _context.Weapons.Add(weapon); 
+            // After adding weapon in the Table Weapons, in the character object there will be the weapon object in the Weapon property
+            
             await _context.SaveChangesAsync();
-
+            
             response.Data = _mapper.Map<GetCharacterDto>(character);
         }
         catch (Exception ex)

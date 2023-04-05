@@ -11,5 +11,6 @@ public class AutoMapperProfile : Profile
         CreateMap<UpdateCharacterDto, Character>();
         CreateMap<UpdateCharacterDto, GetCharacterDto>();
         CreateMap<AddWeaponDto, Weapon>();
+        CreateMap<Weapon, GetWeaponDto>();
     }
 }

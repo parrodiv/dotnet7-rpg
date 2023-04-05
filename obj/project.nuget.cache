@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "r6yGedPQgDAO2Ji5jCsw+lJi6bbLgxXKBPKVvRAEdS05HivqdYVgNVApaMxh/QUslSVm5Np/gtbILHFgXNQrLA==",
+  "dgSpecHash": "P8q4Jb6LzfI68jrNwlwZvRw+VxHaoIIZEa2vX/6zBlJl71djZxAXLvMbezPSgkvJ9aHRcYGo0ita7Pf8gd+gWg==",
   "success": true,
   "projectFilePath": "/Users/alessandroparrilla/corsi/dotnet7-rpg/dotnet7-rpg.csproj",
   "expectedPackageFiles": [
-    "/Users/alessandroparrilla/.nuget/packages/automapper/12.0.0/automapper.12.0.0.nupkg.sha512",
+    "/Users/alessandroparrilla/.nuget/packages/automapper/12.0.1/automapper.12.0.1.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/automapper.extensions.microsoft.dependencyinjection/12.0.0/automapper.extensions.microsoft.dependencyinjection.12.0.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/azure.core/1.24.0/azure.core.1.24.0.nupkg.sha512",
     "/Users/alessandroparrilla/.nuget/packages/azure.identity/1.6.0/azure.identity.1.6.0.nupkg.sha512",
