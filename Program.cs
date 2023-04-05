@@ -5,6 +5,7 @@ global using dotnet7_rpg.Dtos.Character;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
 global using dotnet7_rpg.Data;
+using dotnet7_rpg.Services.WeaponService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -45,6 +46,9 @@ builder.Services.AddScoped<ICharacterService, CharacterService>();
 
 // Register the AuthRepository instance
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+
+// Register WeaponsService instance
+builder.Services.AddScoped<IWeaponService, WeaponService>();
 
 
 
