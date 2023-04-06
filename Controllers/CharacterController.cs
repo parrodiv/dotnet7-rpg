@@ -86,4 +86,16 @@ public class CharacterController : ControllerBase
         }
         return Ok(response); 
     }
+
+
+    [HttpPost("Skill")]
+    public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> AddCharacterSkill(AddCharacterSkillDto newCharacterSkill)
+    {
+        var response = await _characterService.AddCharacterSkill(newCharacterSkill);
+        if (response.Data == null)
+        {
+            return NotFound(response);
+        }
+        return Ok(response); 
+    }
 }
