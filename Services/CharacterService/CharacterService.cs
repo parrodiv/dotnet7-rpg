@@ -178,4 +178,29 @@ public class CharacterService : ICharacterService
 
         return response;
     }
+    
+    
+    
+    public async Task<ServiceResponse<GetCharacterDto>> GetSingleCharacterNoAuth(int id)
+    {
+      
+        var serviceResponse = new ServiceResponse<GetCharacterDto>();
+      
+        try
+        {
+            // adding an extra condition, so I can get a specific Character if the User that make a request is the owner of that Character
+            var dbCharacter =  await _context.Characters
+                .Include(c => c.Weapon)
+                .Include(c =>c.Skills)
+                .FirstOrDefaultAsync(c => c.Id == id) ?? throw  new  Exception($"Character Id {id} not found");
+            serviceResponse.Data = _mapper.Map<GetCharacterDto>(dbCharacter);
+        }
+        catch (Exception ex)
+        {
+            serviceResponse.Message = ex.Message;
+            serviceResponse.Success = false;
+        }
+
+        return serviceResponse;
+    }
 }

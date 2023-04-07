@@ -5,10 +5,14 @@ namespace dotnet7_rpg.Services.FightService;
 public class FightService : IFightService
 {
     private readonly DataContext _context;
+    private readonly ICharacterService _characterService;
+    private readonly IMapper _mapper;
 
-    public FightService(DataContext context)
+    public FightService(DataContext context, ICharacterService characterService, IMapper mapper)
     {
         _context = context;
+        _characterService = characterService;
+        _mapper = mapper;
     }
 
     public async Task<ServiceResponse<AttackResultDto>> WeaponAttack(WeaponAttackDto request)
@@ -16,12 +20,11 @@ public class FightService : IFightService
         var response = new ServiceResponse<AttackResultDto>();
         try
         {
-            var attacker = await _context.Characters
-                .Include(c => c.Weapon)
-                .FirstOrDefaultAsync(c => c.Id == request.AttackerId);
+            // who make the attack request has to be authenticated adn he has to be the owner of the attacker character
+            // (see GetSingleCharacter in CharacterService where it is made the check for both cases)
+            var attacker = _characterService.GetSingleCharacter(request.AttackerId).Result.Data;
             
-            var opponent = await _context.Characters
-                .FirstOrDefaultAsync(c => c.Id == request.OpponentId);
+            var opponent = _characterService.GetSingleCharacterNoAuth(request.OpponentId).Result.Data;
 
             if (attacker is null || opponent is null || attacker.Weapon is null)
             {
@@ -78,20 +81,18 @@ public class FightService : IFightService
         var response = new ServiceResponse<AttackResultDto>();
         try
         {
-            var attacker = await _context.Characters
-                .Include(c => c.Skills)
-                .FirstOrDefaultAsync(
-                    c => c.Id == request.AttackerId);
+            var attacker = _mapper.Map<Character>(_characterService.GetSingleCharacter(request.AttackerId).Result.Data);
+            
+            var opponent = _characterService.GetSingleCharacterNoAuth(request.OpponentId).Result.Data;
 
-            var opponent = await _context.Characters
-                .FirstOrDefaultAsync(c => c.Id == request.OpponentId);
+            attacker = _mapper.Map<Character>(attacker);
             
             if (attacker is null || opponent is null)
             {
                 throw new Exception("Something fishy is going on here...");
             }
 
-            var skill = attacker!.Skills!.FirstOrDefault(s => s.Id == request.SkillId) ??
+            var skill = attacker.Skills!.FirstOrDefault(s => s.Id == request.SkillId) ??
                         throw new Exception($"{attacker.Name} doesn't know skillId {request.SkillId}");
 
             int damage = skill.Damage + (new Random().Next(attacker.Intelligence + 1));

@@ -1,9 +1,10 @@
 using dotnet7_rpg.Dtos.Fight;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace dotnet7_rpg.Controllers;
 
-
+[Authorize]
 [ApiController]
 [Route("[controller]")]
 public class FightController : ControllerBase
