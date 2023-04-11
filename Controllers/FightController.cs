@@ -34,4 +34,10 @@ public class FightController : ControllerBase
     {
         return Ok(await _fightService.Fight(request));
     }
+    
+    [HttpGet("GetHighScore")]
+    public async Task<ActionResult<ServiceResponse<List<HighScoreDto>>>> GetHighScore()
+    {
+        return Ok(await _fightService.GetHighScore());
+    }
 }

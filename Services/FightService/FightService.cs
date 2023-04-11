@@ -269,4 +269,21 @@ public class FightService : IFightService
 
         return response;
     }
+
+    public async Task<ServiceResponse<List<HighScoreDto>>> GetHighScore()
+    {
+        var characters = await _context.Characters
+            .Where(c => c.Fights > 0)
+            .OrderByDescending(c => c.Victories)
+            .ThenBy(c => c.Defeats).ToListAsync();  // if victories are the same number of another character, ThenBy sort Defeats in ascending order
+
+        var response = new ServiceResponse<List<HighScoreDto>>()
+        {
+            // map the type of each character that match the above query
+            Data = characters.Select(c => _mapper.Map<HighScoreDto>(c)).ToList(),
+            Message = "The HighScore filter has been executed successfully!"
+        };
+
+        return response;
+    }
 }
