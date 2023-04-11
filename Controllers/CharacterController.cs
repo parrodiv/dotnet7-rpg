@@ -36,6 +36,18 @@ public class CharacterController : ControllerBase
     }
     
     
+    [HttpGet("GetAllNoAuth")]
+    public async Task<ActionResult<ServiceResponse<List<GetCharacterDto>>>> GetAllNoAuth()
+    {
+        var response = await _characterService.GetAllCharactersNoAuth();
+        if (response.Data == null)
+        {
+            return NotFound(response);
+        }
+        return Ok(response); 
+    }
+    
+    
 
     [HttpGet("{id:int}")] // parameter {id} has to be the same name of the parameter passed to the method
     public async Task<ActionResult<ServiceResponse<GetCharacterDto>>> GetSingle(int id) // api/Character/{id}

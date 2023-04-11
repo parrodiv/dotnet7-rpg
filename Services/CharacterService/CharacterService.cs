@@ -32,6 +32,19 @@ public class CharacterService : ICharacterService
         };
         return serviceResponse;
     }
+    
+    public async Task<ServiceResponse<List<GetCharacterDto>>> GetAllCharactersNoAuth()
+    {
+        // Now I'll get all the characters also those not associated with the authenticated user
+        var dbCharacters = await _context.Characters
+            .Include(c => c.Weapon)
+            .Include(c => c.Skills).ToListAsync();
+        var serviceResponse = new ServiceResponse<List<GetCharacterDto>>()
+        {
+            Data = _mapper.Map<List<GetCharacterDto>>(dbCharacters)
+        };
+        return serviceResponse;
+    }
 
     public async Task<ServiceResponse<GetCharacterDto>> GetSingleCharacter(int id)
     {
